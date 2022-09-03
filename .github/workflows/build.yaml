@@ -33,7 +33,7 @@ jobs:
         devcontainer up --workspace-folder .
         new_id=$(docker image inspect $IMAGE_ID --format "{{.ID}}")
         if [ "$old_id" != "$new_id" ]; then
-          docker tag $IMAGE_ID: IMAGE_ID:$GITHUB_REF_NAME || true
+          docker tag $IMAGE_ID $IMAGE_ID:$GITHUB_REF_NAME || true
           docker push $IMAGE_ID:$GITHUB_REF_NAME || true
         fi
     - name: ccache
