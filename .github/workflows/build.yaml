@@ -33,6 +33,7 @@ jobs:
         devcontainer up --workspace-folder .
         new_id=$(docker image inspect $IMAGE_ID --format "{{.ID}}")
         if [ "$old_id" != "$new_id" ]; then
+          docker tag $IMAGE_ID: IMAGE_ID:$GITHUB_REF_NAME || true
           docker push $IMAGE_ID:$GITHUB_REF_NAME || true
         fi
     - name: ccache
@@ -46,8 +47,8 @@ jobs:
     - name: Build
       run: |
         set -x
-        devcontainer exec --workspace-folder . env pwd
-        devcontainer exec --workspace-folder . env CCACHE_DIR=${GITHUB_WORKSPACE}/.ccache make build
+        workspace=$(devcontainer exec --workspace-folder . env pwd)
+        devcontainer exec --workspace-folder . env CCACHE_DIR=${workspace}/.ccache make build
   CI:
     strategy:
       fail-fast: false
