@@ -45,9 +45,11 @@ build.macOS: build.Linux
 
 
 build.Windows: build.Linux
+	bash -c 'which vcpkg'
+	find / -name vcpkg.cmake
 	set -eux;\
 	 rm -rf td/build; mkdir td/build;\
 	 cd td/build;\
-	 cmake -A x64 -DCMAKE_INSTALL_PREFIX:PATH=../tdlib .. -GNinja;\
+	 cmake -A x64 -DCMAKE_INSTALL_PREFIX:PATH=../tdlib -DCMAKE_TOOLCHAIN_FILE:FILEPATH=/Users/${USER}/AppData/Local/vcpkg/scripts/buildsystems/vcpkg.cmake .. -GNinja;\
 	 bash -c 'time cmake --build . --target install';\
 	 cd ../..; ls -l td/tdlib

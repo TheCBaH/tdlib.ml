@@ -68,6 +68,12 @@ jobs:
         run: |
           set -x
           env
+      - name: vcpkg cache
+        if: runner.os == 'Windows'
+        path: /Users/runneradmin/AppData/Local/vcpkg/archives
+        key: tdlib-vcpkg-${{ secrets.CACHE_ID }}-${{ hashFiles('Makefile')}}-${{ env.GITHUB_REF_NAME }}
+        restore-keys: |
+            key: tdlib-vcpkg-${{ secrets.CACHE_ID }}
       - name: Setup
         run: make sys-deps.${{ runner.os }}
       - name: ccache
