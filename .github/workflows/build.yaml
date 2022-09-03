@@ -72,10 +72,11 @@ jobs:
         if: runner.os == 'Windows'
         uses: actions/cache@v2
         id: tdlib_vcpkg
-        path: /Users/runneradmin/AppData/Local/vcpkg/archives
-        key: tdlib-vcpkg-${{ secrets.CACHE_ID }}-${{ hashFiles('Makefile')}}-${{ env.GITHUB_REF_NAME }}
-        restore-keys: |
-            key: tdlib-vcpkg-${{ secrets.CACHE_ID }}
+        with:
+          path: /Users/runneradmin/AppData/Local/vcpkg/archives
+          key: tdlib-vcpkg-${{ secrets.CACHE_ID }}-${{ hashFiles('Makefile')}}-${{ env.GITHUB_REF_NAME }}
+          restore-keys: |
+              key: tdlib-vcpkg-${{ secrets.CACHE_ID }}
       - name: Setup
         run: make sys-deps.${{ runner.os }}
       - name: ccache
