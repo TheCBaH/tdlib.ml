@@ -18,23 +18,37 @@ sys-deps.Linux: sys-deps.debian
 
 sys-deps.macOS: 
 	brew install\
-	 cccache\
+	 ccache\
+	 ninja\
 	 cmake\
 	 gperf\
 	 openssl\
 
 sys-deps.Windows: 
 	vcpkg.exe install\
-	 ccache\
+	 ninja\
 	 gperf\
 	 openssl\
 	 zlib\
 
-build:
+build.Linux:
 	set -eux;\
 	 rm -rf td/build; mkdir td/build;\
 	 cd td/build; cmake\
 	  $(if $(realpath /usr/local/opt/openssl/),-DOPENSSL_ROOT_DIR=/usr/local/opt/openssl/)\
 	  -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=../tdlib .. -GNinja;\
+	 bash -c 'time cmake --build . --target install';\
+	 cd ../..; ls -l td/tdlib
+
+build: build.Linux
+
+build.macOS: build.Linux
+
+
+build.Windows: build.Linux
+	set -eux;\
+	 rm -rf td/build; mkdir td/build;\
+	 cd td/build;\
+	 cmake -A x64 -DCMAKE_INSTALL_PREFIX:PATH=../tdlib .. -GNinja;\
 	 bash -c 'time cmake --build . --target install';\
 	 cd ../..; ls -l td/tdlib
