@@ -46,6 +46,7 @@ jobs:
     - name: Build
       run: |
         set -x
+        devcontainer exec --workspace-folder . env pwd
         devcontainer exec --workspace-folder . env CCACHE_DIR=${GITHUB_WORKSPACE}/.ccache make build
   CI:
     strategy:
@@ -61,13 +62,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: true
-
-      - name: Use OCaml ${{ matrix.ocaml-compiler }}
-        uses: ocaml/setup-ocaml@v2
-        with:
-          ocaml-compiler: ${{ matrix.ocaml-compiler }}
-
-      - name: Populate credentials
+      - name: Environment
         shell: bash
         run: |
           set -x
