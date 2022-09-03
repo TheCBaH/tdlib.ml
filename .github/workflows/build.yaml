@@ -40,7 +40,7 @@ jobs:
       id: tdlib_ccache
       with:
         path: .ccache
-        key: tdlib-ccache-${{ secrets.CACHE_ID }}-${{ hashFiles('Makefile')}}
+        key: tdlib-ccache-${{ secrets.CACHE_ID }}-${{ hashFiles('Makefile')}}-${{ env.GITHUB_REF_NAME }}
         restore-keys: |
             key: tdlib-ccache-${{ secrets.CACHE_ID }}
     - name: Build
