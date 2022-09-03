@@ -68,9 +68,8 @@ jobs:
         run: |
           set -x
           env
-      - name: Setup Ubuntu
-        if: runner.os == 'Linux'
-        run: make sys-deps.linux
+      - name: Setup
+        run: make sys-deps.${{runner.os}}
       - name: ccache
         uses: actions/cache@v2
         id: tdlib_ccache
