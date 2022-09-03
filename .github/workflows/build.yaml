@@ -41,9 +41,9 @@ jobs:
       id: tdlib_ccache
       with:
         path: .ccache
-        key: tdlib-ccache-${{ secrets.CACHE_ID }}-${{ hashFiles('Makefile')}}-${{ env.GITHUB_REF_NAME }}
+        key: tdlib-ccache-${{ secrets.CACHE_ID }}-${{ github.job }}-${{ hashFiles('Makefile')}}-${{ env.GITHUB_REF_NAME }}
         restore-keys: |
-            key: tdlib-ccache-${{ secrets.CACHE_ID }}
+            key: tdlib-ccache-${{ secrets.CACHE_ID }}-${{ github.job }}
     - name: Build
       run: |
         set -x
@@ -71,5 +71,13 @@ jobs:
       - name: Setup Ubuntu
         if: runner.os == 'Linux'
         run: make sys-deps.linux
+      - name: ccache
+        uses: actions/cache@v2
+        id: tdlib_ccache
+        with:
+          path: .ccache
+          key: tdlib-ccache-${{ secrets.CACHE_ID }}-${{ github.job }}-${{ matrix.os }}-${{ hashFiles('Makefile')}}-${{ env.GITHUB_REF_NAME }}
+          restore-keys: |
+              key: tdlib-ccache-${{ secrets.CACHE_ID }}-${{ github.job }}-${{ matrix.os }}
       - name: Build
-        run: make
+        run: env CCACHE_DIR=${GITHUB_WORKSPACE}/.ccache make
