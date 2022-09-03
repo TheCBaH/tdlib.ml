@@ -26,7 +26,6 @@ sys-deps.macOS:
 
 sys-deps.Windows: 
 	vcpkg.exe install\
-	 ninja\
 	 gperf\
 	 openssl\
 	 zlib\
