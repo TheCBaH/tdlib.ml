@@ -14,6 +14,8 @@ sys-deps.debian:
 	 php-cli\
 	 zlib1g-dev\
 
+sys-deps.linux: sys-deps.debian
+
 build:
 	set -eux;\
 	 rm -rf td/build; mkdir td/build;\

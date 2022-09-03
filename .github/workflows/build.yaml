@@ -69,6 +69,7 @@ jobs:
           set -x
           env
       - name: Setup Ubuntu
-        run: make sys-deps.debian
+        if: runner.os == 'Linux'
+        run: make sys-deps.linux
       - name: Build
         run: make
