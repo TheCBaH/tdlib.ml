@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  devcontainers:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        submodules: true
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build devcontainers image
+      run: |
+        set -x
+        npm install -g @devcontainers/cli
+        IMAGE_ID=ghcr.io/$GITHUB_REPOSITORY/devcontainers-ocaml.ci
+        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+        old_id=''
+        if docker pull $IMAGE_ID:$GITHUB_REF_NAME; then
+          old_id=$(docker image inspect $IMAGE_ID:$GITHUB_REF_NAME --format "{{.ID}}")
+        fi
+        devcontainer build --image-name $IMAGE_ID --cache-from $IMAGE_ID:$GITHUB_REF_NAME --workspace-folder .
+        devcontainer up --workspace-folder .
+        new_id=$(docker image inspect $IMAGE_ID --format "{{.ID}}")
+        if [ "$old_id" != "$new_id" ]; then
+          docker tag $IMAGE_ID $IMAGE_ID:$GITHUB_REF_NAME || true
+          docker push $IMAGE_ID:$GITHUB_REF_NAME || true
+        fi
+    - name: ccache
+      uses: actions/cache@v3
+      id: tdlib_ccache
+      with:
+        path: .ccache
+        key: ${{ secrets.CACHE_ID }}-${{ github.job }}-${{ hashFiles('Makefile')}}-${{ github.ref_name }}
+        restore-keys: |
+          ${{ secrets.CACHE_ID }}-${{ github.job }}
+    - name: Build
+      run: |
+        set -x
+        devcontainer exec --workspace-folder . sh -ceux "pwd >.workspace"
+        workspace=$(cat .workspace)
+        devcontainer exec --workspace-folder . env CCACHE_DIR=${workspace}/.ccache make build
+  CI:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: vcpkg cache
+        if: runner.os == 'Windows'
+        uses: actions/cache@v3
+        id: vcpkg
+        with:
+          path: .vcpkg-cache
+          key: ${{ secrets.CACHE_ID }}-${{ matrix.os }}-${{ hashFiles('Makefile')}}-${{ github.ref_name }}
+          restore-keys: |
+              ${{ secrets.CACHE_ID }}-${{ matrix.os }}
+      - name: Setup
+        env:
+          VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/.vcpkg-cache
+        shell: bash
+        run: |
+          set -x
+          mkdir -p .vcpkg-cache
+          make sys-deps.${{ runner.os }}
+      - name: ccache
+        uses: actions/cache@v3
+        id: ccache
+        if: runner.os != 'Windows'
+        with:
+          path: .ccache
+          key: ${{ secrets.CACHE_ID }}-${{ github.job }}-${{ matrix.os }}-${{ hashFiles('Makefile')}}-${{ github.ref_name }}
+          restore-keys: |
+            ${{ secrets.CACHE_ID }}-${{ github.job }}-${{ matrix.os }}
+      - name: Build
+        run: env CCACHE_DIR=${GITHUB_WORKSPACE}/.ccache make build.${{ runner.os }}
