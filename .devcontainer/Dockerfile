@@ -6,7 +6,7 @@ RUN set -exu;\
 export DEBIAN_FRONTEND=noninteractive;\
 apt-get update;\
 apt-get install --no-install-recommends -y\
- clang\
+ ccache\
  cmake\
  g++\
  git\
