@@ -43,10 +43,11 @@ build: build.Linux
 
 build.macOS: build.Linux
 
-
-build.Windows: build.Linux
+build.Windows:
 	bash -c 'which vcpkg'
 	find / -name vcpkg.cmake
+
+_build.Windows:
 	set -eux;\
 	 rm -rf td/build; mkdir td/build;\
 	 cd td/build;\
