@@ -69,7 +69,7 @@ jobs:
           set -x
           env
       - name: Setup
-        run: make sys-deps.${{runner.os}}
+        run: make sys-deps.${{ runner.os }}
       - name: ccache
         uses: actions/cache@v2
         id: tdlib_ccache
@@ -79,4 +79,4 @@ jobs:
           restore-keys: |
               key: tdlib-ccache-${{ secrets.CACHE_ID }}-${{ github.job }}-${{ matrix.os }}
       - name: Build
-        run: env CCACHE_DIR=${GITHUB_WORKSPACE}/.ccache make
+        run: env CCACHE_DIR=${GITHUB_WORKSPACE}/.ccache make build.${{ runner.os }}
