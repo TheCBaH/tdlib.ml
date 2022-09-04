@@ -74,7 +74,7 @@ jobs:
         uses: actions/cache@v3
         id: vcpkg
         with:
-          path: /Users/runneradmin/AppData/Local/vcpkg/archives
+          path: /C/Users/runneradmin/AppData/Local/vcpkg/archives
           key: ${{ secrets.CACHE_ID }}-${{ hashFiles('Makefile')}}-${{ github.ref_name }}
           restore-keys: |
               ${{ secrets.CACHE_ID }}
