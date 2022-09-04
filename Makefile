@@ -49,7 +49,7 @@ build: build.Linux
 build.macOS: build.Linux
 
 build.Windows:
-	set -eux;env;ls -al; ccache --init;ls -al;pwd
+	set -eux;pwd;env;ls -al; CCACHE_CONFIG=--max-size=256M --set-config=compression=true ccache --show-stats;ls -al;pwd
 	set -eux;\
 	 rm -rf td/build; mkdir td/build; cd td/build;\
 	  cmake\
