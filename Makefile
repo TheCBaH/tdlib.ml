@@ -32,13 +32,13 @@ sys-deps.Windows:
 	 ninja\
 	 ;
 	vcpkg.exe install\
-	 openssl\
-	 zlib\
+	 openssl:x64-windows\
+	 zlib:x64-windows\
 
 build.Linux:
 	set -eux;\
-	 rm -rf td/build; mkdir td/build;\
-	 cd td/build; cmake\
+	 rm -rf td/build; mkdir td/build; cd td/build;\
+	  cmake\
 	  $(if $(realpath /usr/local/opt/openssl/),-DOPENSSL_ROOT_DIR=/usr/local/opt/openssl/)\
 	  -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=../tdlib .. -GNinja;\
 	 bash -c 'time cmake --build . --target install';\
@@ -50,8 +50,7 @@ build.macOS: build.Linux
 
 build.Windows:
 	set -eux;\
-	 rm -rf td/build; mkdir td/build;\
-	 cd td/build;\
-	 cmake -DCMAKE_INSTALL_PREFIX:PATH=../tdlib -DCMAKE_TOOLCHAIN_FILE:FILEPATH=/c/vcpkg/scripts/buildsystems/vcpkg.cmake .. -GNinja;\
+	 rm -rf td/build; mkdir td/build; cd td/build;\
+	 cmake -A x64  -DCMAKE_INSTALL_PREFIX:PATH=../tdlib -DCMAKE_TOOLCHAIN_FILE:FILEPATH=/c/vcpkg/scripts/buildsystems/vcpkg.cmake ..;\
 	 bash -c 'time cmake --build . --target install';\
 	 cd ../..; ls -l td/tdlib
