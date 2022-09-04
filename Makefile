@@ -28,10 +28,10 @@ sys-deps.Windows: CCACHE_VER=4.6.3
 sys-deps.Windows: 
 	choco install\
 	 ccache\
+	 gperf\
 	 ninja\
 	 ;
 	vcpkg.exe install\
-	 gperf\
 	 openssl\
 	 zlib\
 
