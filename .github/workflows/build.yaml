@@ -84,7 +84,7 @@ jobs:
         shell: bash
         run: |
           set -x
-          mkdir .vcpkg-cache
+          mkdir -p .vcpkg-cache
           make sys-deps.${{ runner.os }}
       - name: ccache
         uses: actions/cache@v3
