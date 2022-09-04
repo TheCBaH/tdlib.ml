@@ -60,3 +60,4 @@ build.Windows:
 	   -DCMAKE_TOOLCHAIN_FILE:FILEPATH=/c/vcpkg/scripts/buildsystems/vcpkg.cmake ..;\
 	 bash -c 'time cmake --build . --target install';\
 	 cd ../..; ls -l td/tdlib
+	 CCACHE_DIR=${shell pwd}/.ccache ccache --show-stats
