@@ -74,11 +74,12 @@ jobs:
         uses: actions/cache@v3
         id: vcpkg
         with:
-          path: /C/Users/runneradmin/AppData/Local/vcpkg/archives
-          key: ${{ secrets.CACHE_ID }}-${{ hashFiles('Makefile')}}-${{ github.ref_name }}
+          path: .vcpkg-cache
+          key: ${{ secrets.CACHE_ID }}-${{ matrix.os }}-${{ hashFiles('Makefile')}}-${{ github.ref_name }}
           restore-keys: |
-              ${{ secrets.CACHE_ID }}
+              ${{ secrets.CACHE_ID }}-${{ matrix.os }}
       - name: Setup
+        env: VCPKG_DEFAULT_BINARY_CACHE = ${{ github.workspace }}/.vcpkg-cache
         run: make sys-deps.${{ runner.os }}
       - name: ccache
         uses: actions/cache@v3

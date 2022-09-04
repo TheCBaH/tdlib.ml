@@ -51,6 +51,6 @@ build.macOS: build.Linux
 build.Windows:
 	set -eux;\
 	 rm -rf td/build; mkdir td/build; cd td/build;\
-	 cmake -A x64  -DCMAKE_INSTALL_PREFIX:PATH=../tdlib -DCMAKE_TOOLCHAIN_FILE:FILEPATH=/c/vcpkg/scripts/buildsystems/vcpkg.cmake ..;\
+	 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -cmake -A x64  -DCMAKE_INSTALL_PREFIX:PATH=../tdlib -DCMAKE_TOOLCHAIN_FILE:FILEPATH=/c/vcpkg/scripts/buildsystems/vcpkg.cmake ..;\
 	 bash -c 'time cmake --build . --target install';\
 	 cd ../..; ls -l td/tdlib
