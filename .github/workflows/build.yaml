@@ -81,7 +81,11 @@ jobs:
       - name: Setup
         env: 
           VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/.vcpkg-cache
-        run: make sys-deps.${{ runner.os }}
+        shell: bash
+        run: |
+          set -x
+          mkdir .vcpkg-cache
+          make sys-deps.${{ runner.os }}
       - name: ccache
         uses: actions/cache@v3
         id: ccache
