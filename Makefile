@@ -49,10 +49,10 @@ build: build.Linux
 build.macOS: build.Linux
 
 build.Windows:
-	set -eux;pwd;env;ls -al; CCACHE_CONFIG="--max-size=256M --set-config=compression=true" ccache --show-stats;ls -al;pwd
+	set -eux;pwd;env;ls -al; CCACHE_DIR=${CURDIR}/.ccache CCACHE_CONFIG="--max-size=256M --set-config=compression=true" ccache --show-stats;ls -al;pwd
 	set -eux;\
 	 rm -rf td/build; mkdir td/build; cd td/build;\
-	  cmake\
+	  CCACHE_DIR=${CURDIR}/.ccache cmake\
 	   -A x64 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_INSTALL_PREFIX:PATH=../tdlib\
 	   -DCMAKE_TOOLCHAIN_FILE:FILEPATH=/c/vcpkg/scripts/buildsystems/vcpkg.cmake ..;\
 	 bash -c 'time cmake --build . --target install';\
