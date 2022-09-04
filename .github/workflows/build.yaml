@@ -98,4 +98,4 @@ jobs:
         shell: bash
         run: |
           set -x
-          env CCACHE_DIR=${GITHUB_WORKSPACE}/.ccache make build.${{ runner.os }}
+          env CCACHE_DIR=$(pwd)/.ccache make build.${{ runner.os }}
