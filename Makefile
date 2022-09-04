@@ -48,14 +48,10 @@ build: build.Linux
 
 build.macOS: build.Linux
 
-_build.Windows:
-	bash -c 'which vcpkg'
-	powershell Get-Childitem -Path / -Include vcpkg.cmake -File -Recurse -ErrorAction SilentlyContinue
-
-build.Windows: _build.Windows
+build.Windows:
 	set -eux;\
 	 rm -rf td/build; mkdir td/build;\
 	 cd td/build;\
-	 cmake -A x64 -DCMAKE_INSTALL_PREFIX:PATH=../tdlib -DCMAKE_TOOLCHAIN_FILE:FILEPATH=/c/vcpkg/scripts/buildsystems/vcpkg.cmake .. -GNinja;\
+	 cmake -DCMAKE_INSTALL_PREFIX:PATH=../tdlib -DCMAKE_TOOLCHAIN_FILE:FILEPATH=/c/vcpkg/scripts/buildsystems/vcpkg.cmake .. -GNinja;\
 	 bash -c 'time cmake --build . --target install';\
 	 cd ../..; ls -l td/tdlib
