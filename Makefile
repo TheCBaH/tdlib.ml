@@ -45,7 +45,7 @@ build.macOS: build.Linux
 
 _build.Windows:
 	bash -c 'which vcpkg'
-	powershell -Path / Get-Childitem -Include vcpkg.cmake -File -Recurse -ErrorAction SilentlyContinue
+	powershell Get-Childitem -Path / -Include vcpkg.cmake -File -Recurse -ErrorAction SilentlyContinue
 
 build.Windows: _build.Windows
 	set -eux;\
