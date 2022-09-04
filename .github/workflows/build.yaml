@@ -95,4 +95,4 @@ jobs:
           restore-keys: |
             ${{ secrets.CACHE_ID }}-${{ github.job }}-${{ matrix.os }}
       - name: Build
-        run: make build.${{ runner.os }}
+        run: env CCACHE_DIR=${GITHUB_WORKSPACE}/.ccache make build.${{ runner.os }}
