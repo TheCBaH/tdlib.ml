@@ -50,7 +50,7 @@ build.macOS: build.Linux
 
 build.Windows:
 	set -eux;pwd;env;ls -al;\
-	 CCACHE_DIR=$(shell pwd)/.ccache CCACHE_CONFIG="--max-size=256M --set-config=compression=true" ccache;\
+	 CCACHE_DIR=$(shell pwd)/.ccache CCACHE_CONFIG="--max-size=256M --set-config=compression=true" ccache --cleanup;\
 	 CCACHE_DIR=${shell pwd}/.ccache ccache --show-config;\
 	 ls -al
 	set -eux;\
