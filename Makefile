@@ -26,8 +26,10 @@ sys-deps.macOS:
 
 sys-deps.Windows: CCACHE_VER=4.6.3
 sys-deps.Windows: 
-	wget https://github.com/ccache/ccache/releases/download/v${CCACHE_VER}/ccache-${CCACHE_VER}-windows-x86_64.zip
-	unzip ccache-${CCACHE_VER}-windows-x86_64.zip
+	choco install\
+	 ccache\
+	 ninja\
+	 ;
 	vcpkg.exe install\
 	 gperf\
 	 openssl\
