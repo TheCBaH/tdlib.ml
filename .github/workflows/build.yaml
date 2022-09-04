@@ -43,11 +43,12 @@ jobs:
         path: .ccache
         key: ${{ secrets.CACHE_ID }}-${{ github.job }}-${{ hashFiles('Makefile')}}-${{ github.ref_name }}
         restore-keys: |
-            ${{ secrets.CACHE_ID }}-${{ github.job }}
+          ${{ secrets.CACHE_ID }}-${{ github.job }}
     - name: Build
       run: |
         set -x
-        workspace=$(devcontainer exec --workspace-folder . env pwd)
+        devcontainer exec --workspace-folder . sh -ceux "pwd >.workspace"
+        workspace=$(cat .workspace)
         devcontainer exec --workspace-folder . env CCACHE_DIR=${workspace}/.ccache make build
   CI:
     strategy:
@@ -86,6 +87,6 @@ jobs:
           path: .ccache
           key: ${{ secrets.CACHE_ID }}-${{ github.job }}-${{ matrix.os }}-${{ hashFiles('Makefile')}}-${{ github.ref_name }}
           restore-keys: |
-              ${{ secrets.CACHE_ID }}-${{ github.job }}-${{ matrix.os }}
+            ${{ secrets.CACHE_ID }}-${{ github.job }}-${{ matrix.os }}
       - name: Build
         run: env CCACHE_DIR=${GITHUB_WORKSPACE}/.ccache make build.${{ runner.os }}
