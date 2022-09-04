@@ -43,12 +43,12 @@ jobs:
         path: .ccache
         key: ${{ secrets.CACHE_ID }}-${{ github.job }}-${{ hashFiles('Makefile')}}-${{ github.ref_name }}
         restore-keys: |
-            key: ${{ secrets.CACHE_ID }}-${{ github.job }}
+            ${{ secrets.CACHE_ID }}-${{ github.job }}
     - name: Build
       run: |
         set -x
         workspace=$(devcontainer exec --workspace-folder . env pwd)
-        devcontainer exec --workspace-folder . env CCACHE_DIR=${workspace}/.ccache make build
+        devcontainer exec --workspace-folder . env CCACHE_DIR=${workspace}/.ccache make build.${}
   CI:
     strategy:
       fail-fast: false
@@ -76,7 +76,7 @@ jobs:
           path: /Users/runneradmin/AppData/Local/vcpkg/archives
           key: ${{ secrets.CACHE_ID }}-${{ hashFiles('Makefile')}}-${{ github.ref_name }}
           restore-keys: |
-              key: ${{ secrets.CACHE_ID }}
+              ${{ secrets.CACHE_ID }}
       - name: Setup
         run: make sys-deps.${{ runner.os }}
       - name: ccache
@@ -86,6 +86,6 @@ jobs:
           path: .ccache
           key: ${{ secrets.CACHE_ID }}-${{ github.job }}-${{ matrix.os }}-${{ hashFiles('Makefile')}}-${{ github.ref_name }}
           restore-keys: |
-              key: ${{ secrets.CACHE_ID }}-${{ github.job }}-${{ matrix.os }}
+              ${{ secrets.CACHE_ID }}-${{ github.job }}-${{ matrix.os }}
       - name: Build
         run: env CCACHE_DIR=${GITHUB_WORKSPACE}/.ccache make build.${{ runner.os }}
