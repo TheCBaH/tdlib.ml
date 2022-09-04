@@ -24,7 +24,10 @@ sys-deps.macOS:
 	 gperf\
 	 openssl\
 
+sys-deps.Windows: CCACHE_VER=4.6.3
 sys-deps.Windows: 
+	wget https://github.com/ccache/ccache/releases/download/v${CCACHE_VER}/ccache-${CCACHE_VER}-windows-x86_64.zip
+	unzip ccache-${CCACHE_VER}-windows-x86_64.zip
 	vcpkg.exe install\
 	 gperf\
 	 openssl\
@@ -51,6 +54,6 @@ build.Windows: _build.Windows
 	set -eux;\
 	 rm -rf td/build; mkdir td/build;\
 	 cd td/build;\
-	 cmake -A x64 -DCMAKE_INSTALL_PREFIX:PATH=../tdlib -DCMAKE_TOOLCHAIN_FILE:FILEPATH=/c/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake .. -GNinja;\
+	 cmake -A x64 -DCMAKE_INSTALL_PREFIX:PATH=../tdlib -DCMAKE_TOOLCHAIN_FILE:FILEPATH=/c/vcpkg/scripts/buildsystems/vcpkg.cmake .. -GNinja;\
 	 bash -c 'time cmake --build . --target install';\
 	 cd ../..; ls -l td/tdlib
