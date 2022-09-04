@@ -55,7 +55,7 @@ build.Windows:
 	 ls -al
 	set -eux;\
 	 rm -rf td/build; mkdir td/build; cd td/build;\
-	  CCACHE_DIR=${CURDIR}/.ccache cmake\
+	  CCACHE_DIR=${shell pwd}/.ccache cmake\
 	   -A x64 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_INSTALL_PREFIX:PATH=../tdlib\
 	   -DCMAKE_TOOLCHAIN_FILE:FILEPATH=/c/vcpkg/scripts/buildsystems/vcpkg.cmake ..;\
 	 bash -c 'time cmake --build . --target install';\
