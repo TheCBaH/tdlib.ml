@@ -48,7 +48,7 @@ jobs:
       run: |
         set -x
         workspace=$(devcontainer exec --workspace-folder . env pwd)
-        devcontainer exec --workspace-folder . env CCACHE_DIR=${workspace}/.ccache make build.${}
+        devcontainer exec --workspace-folder . env CCACHE_DIR=${workspace}/.ccache make build
   CI:
     strategy:
       fail-fast: false
